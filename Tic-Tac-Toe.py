@@ -1,20 +1,21 @@
 import random
 
+EMPTY = 0
+
+
+
 Board = [
-    [0, 0, 0],
-    [0, 0, 0],
-    [0, 0, 0]
+    [EMPTY, EMPTY, EMPTY],
+    [EMPTY, EMPTY, EMPTY],
+    [EMPTY, EMPTY, EMPTY]
 ]
 
-turn = True  # Initialize turn variable
-opponent = True  # Initialize opponent variable
-computerTurn = False  # Initialize computerMove variable
 
 def initializeBoard():
     return [
-        [0, 0, 0],
-        [0, 0, 0],
-        [0, 0, 0]
+        [EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY]
     ]
 
 def firstMove():
@@ -55,7 +56,7 @@ def printBoard(Board):
     print("\n\n-----------------------\n\n")
     for i in range(3):
         for j in range(3):
-            if Board[i][j] != 0:
+            if Board[i][j] != EMPTY:
                 play = Board[i][j]
             else:
                 play = " "
@@ -72,25 +73,25 @@ def printBoard(Board):
 
 def checkWin(Board):
     for i in range(3):
-        if Board[i][0] == Board[i][1] == Board[i][2] != 0:
+        if Board[i][0] == Board[i][1] == Board[i][2] != EMPTY:
             printBoard(Board)
             print('\U0001F44F' * 25)
             print("Player", Board[i][0], "Wins")
             print('\U0001F44F' * 25)
             return True
-        if Board[0][i] == Board[1][i] == Board[2][i] != 0:
+        if Board[0][i] == Board[1][i] == Board[2][i] != EMPTY:
             printBoard(Board)
             print('\U0001F44F' * 25)
             print("Player", Board[0][i], "Wins")
             print('\U0001F44F' * 25)
             return True
-    if Board[0][0] == Board[1][1] == Board[2][2] != 0:
+    if Board[0][0] == Board[1][1] == Board[2][2] != EMPTY:
         printBoard(Board)
         print('\U0001F44F'*25)
         print("Player", Board[0][0], "Wins")
         print('\U0001F44F' * 25)
         return True
-    if Board[0][2] == Board[1][1] == Board[2][0] != 0:
+    if Board[0][2] == Board[1][1] == Board[2][0] != EMPTY:
         printBoard(Board)
         print('\U0001F44F'*25)
         print("Player", Board[0][2], "Wins")
@@ -99,7 +100,7 @@ def checkWin(Board):
     return False
 
 
-def checkMove(x):
+def isInvalidMove(x):
     x = str(x)
     if not x.isdigit() :
         return True
@@ -111,43 +112,42 @@ def checkMove(x):
         return False
 
 
-def playMove():
-    global turn, opponent, computerTurn
-    if not opponent and computerTurn:
-        x = random.randint(1, 9) #generate a random move for computer turn
-    else:
-        x = input('Enter the number where you want to place your move (1-9): ')
-
-    if checkMove(x):
-        print("Invalid Move")
-        playMove()
-        return
-
-    x = int(x)
-    row = (x - 1) // 3
-    col = (x - 1) % 3
-
-    if Board[row][col] != 0:
-        if opponent or turn:
-            print("Invalid Move")
-        playMove()
-        return
-    else:
-        if turn:
-            Board[row][col] = 'X'
-            turn = False
+def playMove(turn, opponent, computerTurn = False):
+    while True:
+        if not opponent and computerTurn:
+            x = random.randint(1, 9) #generate a random move for computer turn
         else:
-            Board[row][col] = 'O'
-            turn = True
+            x = input('Enter the number where you want to place your move (1-9): ')
+
+        if isInvalidMove(x):
+            print("Invalid Move")
+            continue
+
+        x = int(x)
+        row = (x - 1) // 3
+        col = (x - 1) % 3
+
+        if Board[row][col] != EMPTY:
+            if not computerTurn:
+                print("Invalid Move")
+            continue
+        else:
+            if turn:
+                Board[row][col] = 'X'
+                return False
+            else:
+                Board[row][col] = 'O'
+                return True
 
 
-def game():
-    global computerTurn
+def game(turn, singleGame = True, computerTurn = False):
     moves()
     for i in range(9):
         printBoard(Board)
-        playMove()
-        computerTurn = not computerTurn
+        turn = playMove(turn, opponent, computerTurn)
+        if not singleGame:
+            computerTurn = not computerTurn
+
         if checkWin(Board):
             return
 
@@ -163,15 +163,12 @@ while True:
     if play == '1':
         opponent = True
         Board = initializeBoard()
-        turn = startingMove()
-        computerTurn = False
-        game()
+        game(startingMove())
     elif play == '2':
         opponent = False
         Board = initializeBoard()
         computerTurn = not firstMove()
-        turn = startingMove()
-        game()
+        game(startingMove(),False , computerTurn)
     elif play == '0':
         break
     else:
