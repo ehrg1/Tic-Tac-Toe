@@ -6,8 +6,23 @@ Board = [
     [0, 0, 0]
 ]
 
-turn = True
+
+turn = True  # Initialize turn variable
 opponent = True  # Initialize opponent variable
+
+def startingMove():
+    global turn
+    x = input("enter the starting move(X, O): ")
+    x = x.upper()
+    if x == 'X':
+        turn = True
+    elif x == 'O':
+        turn = False
+    else:
+        print("Invalid Input")
+        startingMove()
+
+
 
 def moves():
     print("""
@@ -35,9 +50,14 @@ def printBoard(Board):
         if i != 2:
             print("-" * 20)
 
+
+
 def computerMove():
     x = random.randint(1, 9)
     return x
+
+
+
 def checkWin(Board):
     for i in range(3):
         if Board[i][0] == Board[i][1] == Board[i][2] != 0:
@@ -114,8 +134,7 @@ def game():
     
 
 while True:
-    print("Do you want to play a game with a friend(1) or a computer(2) Eenter 0 to exit? ")
-    play = input()
+    play = input("Do you want to play a game with a friend(1) or a computer(2) Eenter 0 to exit? ")
     if play == '1':
         opponent = True
         Board = [
@@ -123,6 +142,7 @@ while True:
             [0, 0, 0],
             [0, 0, 0]
         ]
+        startingMove()
         game()
     elif play == '2':
         opponent = False
@@ -130,7 +150,8 @@ while True:
             [0, 0, 0],
             [0, 0, 0],
             [0, 0, 0]
-        ]   
+        ]  
+        startingMove()
         game()
     elif play == '0':
         break
