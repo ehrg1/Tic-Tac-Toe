@@ -203,15 +203,14 @@ def startingMove():
         playMove()
 
 
-
+#GUI Setup
 startMove = ['O', 'X']
 gameType = ['Player vs Player', 'Player vs Computer']
 startingPlayer = ['Player 1', 'computer']
 gameDifficulty = ['Easy', 'Hard']
-
+#creating the main window
 window = Tk()
 window.title("Tic Tac Toe")
-# window.geometry("400x450")
 window.configure(bg="white")
 window.resizable(False, False)
 
