@@ -157,12 +157,12 @@ def playMove(i=None, j=None):  # assining default values to i and j to avoid err
         if BoardGUI[i][j]['text'] == "" and BoardGUI[i][j]['state'] == NORMAL:
             if turn:
                 BoardGUI[i][j]['text'] = 'X'
-                BoardGUI[i][j]['disabledforeground'] = '#FFD43B'
+                BoardGUI[i][j]['disabledforeground'] = color_yellow
                 Board[i][j] = 'X'
                 turn = not turn
             else:
                 BoardGUI[i][j]['text'] = 'O'
-                BoardGUI[i][j]['disabledforeground'] = '#306998'
+                BoardGUI[i][j]['disabledforeground'] = color_blue
                 Board[i][j] = 'O'
                 turn = not turn
             BoardGUI[i][j]['state'] = DISABLED
@@ -182,7 +182,16 @@ def playMove(i=None, j=None):  # assining default values to i and j to avoid err
 
             return
 
-
+def checkOpponent():
+    x = gameTypeValue.get()
+    if x == 0:
+        for i in range(len(startingPlayer)):
+            startingPlayerRadio[i].config(state=DISABLED)
+            gameDifficultyRadio[i].config(state=DISABLED)
+    else:
+        for i in range(len(startingPlayer)):
+            startingPlayerRadio[i].config(state=NORMAL)
+            gameDifficultyRadio[i].config(state=NORMAL)
 # ----------------------------------------------------------------------
 
 def startingMove():
@@ -221,12 +230,13 @@ startMove = ['O', 'X']
 gameType = ['Player vs Player', 'Player vs Computer']
 startingPlayer = ['Player 1', 'computer']
 gameDifficulty = ['Easy', 'Hard']
+
 #creating the main window
 window = Tk()
 window.title("Tic Tac Toe")
-window.iconphoto(False, PhotoImage(file='images\\Icon.png'))
+window.iconphoto(False, PhotoImage(file='Icon.png'))
 window.configure(bg="white")
-
+window.geometry("+0+0")#making the window appers in the top left corner of the screen
 window.resizable(False, False)
 
 # making the options frame
@@ -247,7 +257,8 @@ for i in range(len(startMove)):
                                  value=i,
                                  selectcolor=color_light_gray,
                                  bg = color_gray,
-                                 fg=color_white,
+                                 font=("Arial", 13,'bold'),
+                                 fg=[color_blue, color_yellow][i],
                                  indicatoron=False,
                                  width=29)
     startMoveRadio.grid(row=0, column=i + 1, sticky='nsew')
@@ -268,7 +279,8 @@ for i in range(len(gameType)):
                                 selectcolor=color_light_gray,
                                 bg = color_gray,
                                 fg=color_white,
-                                indicatoron=False)
+                                indicatoron=False,
+                                command=checkOpponent)
     gameTypeRadio.grid(row=1, column=i + 1, sticky='nsew')
 
 Label(obtionsFrame,
@@ -279,16 +291,18 @@ Label(obtionsFrame,
       width=20).grid(row=2, column=0, padx=10, pady=10, sticky='nsew')
 
 startingPlayerValue = IntVar()
+startingPlayerRadio = [EMPTY,EMPTY]
 for i in range(len(startingPlayer)):
-    startingPlayerRadio = Radiobutton(obtionsFrame,
+    startingPlayerRadio[i] = Radiobutton(obtionsFrame,
                                       text=startingPlayer[i],
                                       variable=startingPlayerValue,
                                       value=i,
                                       selectcolor=color_light_gray,
                                       bg = color_gray,
                                       fg=color_white,
-                                      indicatoron=False)
-    startingPlayerRadio.grid(row=2, column=i + 1, sticky='nsew')
+                                      indicatoron=False,
+                                      state=DISABLED)
+    startingPlayerRadio[i].grid(row=2, column=i + 1, sticky='nsew')
 
 Label(obtionsFrame,
       text="Game Difficulty",
@@ -298,23 +312,27 @@ Label(obtionsFrame,
       width=20).grid(row=3, column=0, padx=10, pady=10, sticky='nsew')
 
 gameDifficultyValue = IntVar()
+gameDifficultyRadio = [EMPTY,EMPTY]
 for i in range(len(gameDifficulty)):
-    gameDifficultyRadio = Radiobutton(obtionsFrame,
+    gameDifficultyRadio[i] = Radiobutton(obtionsFrame,
                                       text=gameDifficulty[i],
                                       variable=gameDifficultyValue,
                                       value=i,
                                       selectcolor=color_light_gray,
                                       bg = color_gray,
                                       fg=color_white,
-                                      indicatoron=False)
-    gameDifficultyRadio.grid(row=3, column=i + 1, sticky='nsew')
+                                      indicatoron=False,
+                                      state=DISABLED)
+    gameDifficultyRadio[i].grid(row=3, column=i + 1, sticky='nsew')
 
 startButton = Button(obtionsFrame,
                      text="Start Game",
                      font=("Arial", 13),
-                     bg=color_light_gray,
-                     fg=color_white,
                      state=ACTIVE,
+                     fg=color_white,
+                     activeforeground=color_white,
+                     bg=color_light_gray,
+                     activebackground=color_light_gray,
                      command=startingMove)
 startButton.grid(row=4, column=0, columnspan=3, padx=10, pady=10, sticky='nsew')
 
@@ -328,10 +346,11 @@ for i in range(3):
         BoardGUI[i][j] = Button(boardFrame,
                                 text="",
                                 font=("Arial", 20, 'bold'),
-                                activebackground="red",
+                                activebackground=color_light_gray,
                                 bg=color_gray,
-                                width=12,
+                                width=14,
                                 height=2,
+                                borderwidth=10,
                                 state=DISABLED,
                                 command=lambda row=i, column=j: playMove(row, column))
         BoardGUI[i][j].grid(row=i, column=j, sticky='nsew')
