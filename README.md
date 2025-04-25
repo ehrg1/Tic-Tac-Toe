@@ -7,7 +7,7 @@ A simple yet engaging implementation of the classic Tic-Tac-Toe game, developed 
 
 - **Two Game Modes**:
   - **Two-Player Mode**: Play against a friend.
-  - **Single-Player Mode**: Challenge a computer opponent with random move selection.
+  - **Single-Player Mode**: Challenge a computer opponent with two difficulty modes.
 - **User Interfaces**:
   - **Command-Line Interface (CLI)**: Simple text-based gameplay.
   - **Graphical User Interface (GUI)**: Interactive GUI using Tkinter.
