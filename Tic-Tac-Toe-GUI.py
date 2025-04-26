@@ -47,7 +47,7 @@ def generateComputerMove(board, difficulty):
     https://dev.to/lukap/building-an-unbeatable-tic-tac-toe-ai-player-p0f?utm_source
     Generates a move for the computer using a simple strategy.
     - if there is a winning move, play it
-    - if there is a move that blocks the gameMode's potential win, play it
+    - if there is a move that blocks the opponent's potential win, play it
     - take center if available
     - take a corner if available
     - take a side if available
