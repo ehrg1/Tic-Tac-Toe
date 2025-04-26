@@ -5,7 +5,7 @@ import random
 # Constant represent an empty cell on board
 EMPTY = 0
 turn = True
-opponent = False
+gameMode = False
 difficulty = ''
 computerTurn = False
 totalMoves = 0
@@ -47,7 +47,7 @@ def generateComputerMove(board, difficulty):
     https://dev.to/lukap/building-an-unbeatable-tic-tac-toe-ai-player-p0f?utm_source
     Generates a move for the computer using a simple strategy.
     - if there is a winning move, play it
-    - if there is a move that blocks the opponent's potential win, play it
+    - if there is a move that blocks the gameMode's potential win, play it
     - take center if available
     - take a corner if available
     - take a side if available
@@ -146,9 +146,9 @@ def winner():
 
 
 def playMove(i=None, j=None):  # assining default values to i and j to avoid error if computer plays
-    global turn, opponent, difficulty, computerTurn, totalMoves
+    global turn, gameMode, difficulty, computerTurn, totalMoves
     while True:
-        if opponent == 1 and computerTurn:
+        if gameMode == 1 and computerTurn:
             move = generateComputerMove(Board, difficulty)
             if move is not None:
                 i = (move - 1) // 3
@@ -174,15 +174,15 @@ def playMove(i=None, j=None):  # assining default values to i and j to avoid err
                 startButton['text'] = 'Play Again'
                 return
 
-            if opponent == 1 and computerTurn:
+            if gameMode == 1 and computerTurn:
                 computerTurn = False
-            elif opponent == 1 and (not computerTurn):
+            elif gameMode == 1 and (not computerTurn):
                 computerTurn = True
                 playMove()
 
             return
 
-def checkOpponent():
+def checkgameMode():
     x = gameTypeValue.get()
     if x == 0:
         for i in range(len(startingPlayer)):
@@ -195,7 +195,7 @@ def checkOpponent():
 # ----------------------------------------------------------------------
 
 def startingMove():
-    global turn, opponent, difficulty, computerTurn, Board, totalMoves
+    global turn, gameMode, difficulty, computerTurn, Board, totalMoves
     for i in range(3):
         for j in range(3):
             BoardGUI[i][j]['text'] = ""
@@ -205,13 +205,13 @@ def startingMove():
     startButton['state'] = DISABLED
     startButton['bg'] = color_gray
     turn = startMoveValue.get()
-    opponent = gameTypeValue.get()
+    gameMode = gameTypeValue.get()
     difficulty = gameDifficultyValue.get()
     totalMoves = 0
     Board = initializeBoard()
-    if opponent == 1 and startingPlayerValue.get() == 0:
+    if gameMode == 1 and startingPlayerValue.get() == 0:
         computerTurn = False
-    elif opponent == 1 and startingPlayerValue.get() == 1:
+    elif gameMode == 1 and startingPlayerValue.get() == 1:
         computerTurn = True
         playMove()
 
@@ -240,9 +240,9 @@ window.geometry("+0+0")#making the window appers in the top left corner of the s
 window.resizable(False, False)
 
 # making the options frame
-obtionsFrame = Frame(window, bg=color_gray)
+optionsFrame = Frame(window, bg=color_gray)
 
-Label(obtionsFrame,
+Label(optionsFrame,
       text="Starting Move",
       font=("Arial", 13),
       bg=color_gray,
@@ -251,7 +251,7 @@ Label(obtionsFrame,
 
 startMoveValue = IntVar()
 for i in range(len(startMove)):
-    startMoveRadio = Radiobutton(obtionsFrame,
+    startMoveRadio = Radiobutton(optionsFrame,
                                  text=startMove[i],
                                  variable=startMoveValue,
                                  value=i,
@@ -263,7 +263,7 @@ for i in range(len(startMove)):
                                  width=29)
     startMoveRadio.grid(row=0, column=i + 1, sticky='nsew')
 
-Label(obtionsFrame,
+Label(optionsFrame,
       text="Game Type",
       font=("Arial", 13),
       bg=color_gray,
@@ -272,7 +272,7 @@ Label(obtionsFrame,
 
 gameTypeValue = IntVar()
 for i in range(len(gameType)):
-    gameTypeRadio = Radiobutton(obtionsFrame,
+    gameTypeRadio = Radiobutton(optionsFrame,
                                 text=gameType[i],
                                 variable=gameTypeValue,
                                 value=i,
@@ -280,10 +280,10 @@ for i in range(len(gameType)):
                                 bg = color_gray,
                                 fg=color_white,
                                 indicatoron=False,
-                                command=checkOpponent)
+                                command=checkgameMode)
     gameTypeRadio.grid(row=1, column=i + 1, sticky='nsew')
 
-Label(obtionsFrame,
+Label(optionsFrame,
       text="Starting Player",
       font=("Arial", 13),
       bg=color_gray,
@@ -293,7 +293,7 @@ Label(obtionsFrame,
 startingPlayerValue = IntVar()
 startingPlayerRadio = []
 for i in range(len(startingPlayer)):
-    startingPlayerRadio.append(Radiobutton(obtionsFrame,
+    startingPlayerRadio.append(Radiobutton(optionsFrame,
                                       text=startingPlayer[i],
                                       variable=startingPlayerValue,
                                       value=i,
@@ -304,7 +304,7 @@ for i in range(len(startingPlayer)):
                                       state=DISABLED))
     startingPlayerRadio[i].grid(row=2, column=i + 1, sticky='nsew')
 
-Label(obtionsFrame,
+Label(optionsFrame,
       text="Game Difficulty",
       font=("Arial", 13),
       bg=color_gray,
@@ -314,7 +314,7 @@ Label(obtionsFrame,
 gameDifficultyValue = IntVar()
 gameDifficultyRadio = []
 for i in range(len(gameDifficulty)):
-    gameDifficultyRadio.append(Radiobutton(obtionsFrame,
+    gameDifficultyRadio.append(Radiobutton(optionsFrame,
                                       text=gameDifficulty[i],
                                       variable=gameDifficultyValue,
                                       value=i,
@@ -325,7 +325,7 @@ for i in range(len(gameDifficulty)):
                                       state=DISABLED))
     gameDifficultyRadio[i].grid(row=3, column=i + 1, sticky='nsew')
 
-startButton = Button(obtionsFrame,
+startButton = Button(optionsFrame,
                      text="Start Game",
                      font=("Arial", 13),
                      state=ACTIVE,
@@ -336,7 +336,7 @@ startButton = Button(obtionsFrame,
                      command=startingMove)
 startButton.grid(row=4, column=0, columnspan=3, padx=10, pady=10, sticky='nsew')
 
-obtionsFrame.grid(row=0, column=0, columnspan=3, sticky='nsew')
+optionsFrame.grid(row=0, column=0, columnspan=3, sticky='nsew')
 
 # making the board frame
 boardFrame = Frame(window, bg= color_gray)
