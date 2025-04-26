@@ -291,9 +291,9 @@ Label(obtionsFrame,
       width=20).grid(row=2, column=0, padx=10, pady=10, sticky='nsew')
 
 startingPlayerValue = IntVar()
-startingPlayerRadio = [EMPTY,EMPTY]
+startingPlayerRadio = []
 for i in range(len(startingPlayer)):
-    startingPlayerRadio[i] = Radiobutton(obtionsFrame,
+    startingPlayerRadio.append(Radiobutton(obtionsFrame,
                                       text=startingPlayer[i],
                                       variable=startingPlayerValue,
                                       value=i,
@@ -301,7 +301,7 @@ for i in range(len(startingPlayer)):
                                       bg = color_gray,
                                       fg=color_white,
                                       indicatoron=False,
-                                      state=DISABLED)
+                                      state=DISABLED))
     startingPlayerRadio[i].grid(row=2, column=i + 1, sticky='nsew')
 
 Label(obtionsFrame,
@@ -312,9 +312,9 @@ Label(obtionsFrame,
       width=20).grid(row=3, column=0, padx=10, pady=10, sticky='nsew')
 
 gameDifficultyValue = IntVar()
-gameDifficultyRadio = [EMPTY,EMPTY]
+gameDifficultyRadio = []
 for i in range(len(gameDifficulty)):
-    gameDifficultyRadio[i] = Radiobutton(obtionsFrame,
+    gameDifficultyRadio.append(Radiobutton(obtionsFrame,
                                       text=gameDifficulty[i],
                                       variable=gameDifficultyValue,
                                       value=i,
@@ -322,7 +322,7 @@ for i in range(len(gameDifficulty)):
                                       bg = color_gray,
                                       fg=color_white,
                                       indicatoron=False,
-                                      state=DISABLED)
+                                      state=DISABLED))
     gameDifficultyRadio[i].grid(row=3, column=i + 1, sticky='nsew')
 
 startButton = Button(obtionsFrame,
