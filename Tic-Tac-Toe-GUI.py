@@ -6,7 +6,7 @@ import random
 EMPTY = 0
 turn = True
 gameMode = False
-difficulty = ''
+difficulty = 0
 computerTurn = False
 totalMoves = 0
 
@@ -113,8 +113,8 @@ def initializeBoard():
 
 
 def winner():
-    winnerSympol = checkWin(Board)
-    if winnerSympol == None:
+    winnerSymbol = checkWin(Board)
+    if winnerSymbol == None:
       if totalMoves == 9:
           messagebox.showinfo("GameOver", "It's a draw!")
           for i in range(3):
@@ -131,13 +131,13 @@ def winner():
                     BoardGUI[i][j]['state'] = DISABLED
             return True
 
-        if winnerSympol == 'X':
+        if winnerSymbol == 'X':
             messagebox.showinfo("Winner", "Player X wins!")
             for i in range(3):
                 for j in range(3):
                     BoardGUI[i][j]['state'] = DISABLED
             return True
-        elif winnerSympol == 'O':
+        elif winnerSymbol == 'O':
             messagebox.showinfo("Winner", "Player O wins!")
             for i in range(3):
                 for j in range(3):
